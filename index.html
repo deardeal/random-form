@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>隨機分派</title>
+  <meta name="robots" content="noindex,nofollow">
+</head>
+<body>
+<script>
+  // 測試用四個網址。之後可直接換成四個 Google 表單網址。
+  const targets = [
+    { group: "A", url: "https://www.youtube.com/watch?v=N-V6cFulJj0" },
+    { group: "B", url: "https://www.youtube.com/watch?v=szt8Cwtt4kw" },
+    { group: "C", url: "https://www.youtube.com/watch?v=OXyQ3CtXOuc&t=28s" },
+    { group: "D", url: "https://www.youtube.com/watch?v=SeG1iS4QcvM" }
+  ];
+
+  const selected = targets[Math.floor(Math.random() * targets.length)];
+
+  // 直接在最上層頁面跳轉，不需要再按一次按鈕。
+  window.location.replace(selected.url);
+</script>
+
+<noscript>
+  此頁面需要啟用 JavaScript 才能進行隨機分派。
+</noscript>
+</body>
+</html>
