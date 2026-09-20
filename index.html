@@ -3,27 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>隨機分派</title>
+  <title>問卷分派中</title>
   <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <style>
+    body {
+      font-family: Arial, "Microsoft JhengHei", sans-serif;
+      text-align: center;
+      padding: 80px 20px;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
-<script>
-  // 測試用四個網址。之後可直接換成四個 Google 表單網址。
-  const targets = [
-    { group: "A", url: "https://www.youtube.com/watch?v=N-V6cFulJj0" },
-    { group: "B", url: "https://www.youtube.com/watch?v=szt8Cwtt4kw" },
-    { group: "C", url: "https://www.youtube.com/watch?v=OXyQ3CtXOuc&t=28s" },
-    { group: "D", url: "https://www.youtube.com/watch?v=SeG1iS4QcvM" }
-  ];
+  <p id="status">系統正在分派，請稍候……</p>
 
-  const selected = targets[Math.floor(Math.random() * targets.length)];
+  <script>
+    let completed = false;
 
-  // 直接在最上層頁面跳轉，不需要再按一次按鈕。
-  window.location.replace(selected.url);
-</script>
+    function receiveAssignment(result) {
+      if (completed) return;
+      completed = true;
 
-<noscript>
-  此頁面需要啟用 JavaScript 才能進行隨機分派。
-</noscript>
+      if (result && result.url) {
+        window.location.replace(result.url);
+      } else {
+        document.getElementById("status").textContent =
+          "系統暫時無法完成分派，請重新整理頁面再試一次。";
+      }
+    }
+
+    const script = document.createElement("script");
+    script.src =
+      "https://script.google.com/macros/s/AKfycbx4HZqdjlViGlQ3jzC4mGK0EYzcny17JVXxn_9C7TdOkDLMOhPCpBIl4PKU4HP7DbpUDw/exec"
+      + "?callback=receiveAssignment"
+      + "&t=" + Date.now();
+
+    script.onerror = function() {
+      if (completed) return;
+      completed = true;
+      document.getElementById("status").textContent =
+        "連線失敗，請重新整理頁面再試一次。";
+    };
+
+    document.body.appendChild(script);
+
+    setTimeout(function() {
+      if (!completed) {
+        completed = true;
+        document.getElementById("status").textContent =
+          "系統回應較久，請重新整理頁面再試一次。";
+      }
+    }, 12000);
+  </script>
 </body>
 </html>
